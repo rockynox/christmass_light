@@ -1,0 +1,4 @@
+adafruit-circuitpython-servokit
+adafruit-circuitpython-neopixel
+requests
+pytz
