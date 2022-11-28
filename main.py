@@ -1,25 +1,8 @@
-import time
-
 from door import Door
-from tools import get_now, get_sun_times
-
-# import board
-# import neopixel
-# The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
-# For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
-# ORDER = neopixel.GRB
-# PIN = board.D18  # NeoPixels must be connected to D10, D12, D18 or D21 to work.
-NUMPIXELS = 90  # Update this to match the number of LEDs.
-BRIGHTNESS = 0.2  # A number between 0.0 and 1.0, where 0.0 is off, and 1.0 is max.
-AUTO_WRITE = True  # False: Force call to 'pixels.show()' in order to display color
-
-# pixels = neopixel.NeoPixel(PIN, NUMPIXELS, brightness=BRIGHTNESS, auto_write=AUTO_WRITE, pixel_order=ORDER)
-
-checkin = time.monotonic()
-counter = 0
-seconds = 0
+from tools import get_now, get_sun_times, Timer
 
 if __name__ == '__main__':
+    timer = Timer()
     current_time = get_now()
     current_day = None
     village = [
@@ -34,16 +17,12 @@ if __name__ == '__main__':
         Door(17, range(36, 45)),
         Door(19, range(63, 71)),
         Door(21, range(72, 78)),
+        # Door(25, range(72, 78)), # TEST DOOR
     ]
 
     while True:
         # time.sleep(0.1)  # In sec
-        counter += 1
-        if time.monotonic() - checkin > 1.0:
-            seconds += 1
-            print("(approx)", seconds, "seconds have elapsed.", counter, "loops")
-            checkin = time.monotonic()
-            counter = 0
+        timer.update()
 
         if current_time.day != current_day:
             current_day = current_time.day
@@ -52,8 +31,4 @@ if __name__ == '__main__':
                 door.change_day(current_time, sun_times)
 
         for door in village:
-            door_leds = door.get_door_leds_state(current_time)
-            for led_number in door_leds:
-                # pixels[led_number] = door_leds[led_number]
-                # print(f"{led_number} -> {door_leds[led_number]}")
-                pass
+            door.update_door_leds_state(current_time)

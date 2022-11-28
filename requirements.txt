@@ -1,4 +1,7 @@
 adafruit-circuitpython-servokit
 adafruit-circuitpython-neopixel
+adafruit-circuitpython-fancyled
 requests
-pytz
+pytz~=2022.6
+pyzmq
+Flask~=2.2.2
