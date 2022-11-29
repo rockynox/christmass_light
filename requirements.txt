@@ -5,3 +5,4 @@ requests
 pytz~=2022.6
 pyzmq
 Flask~=2.2.2
+rpi_ws281x
