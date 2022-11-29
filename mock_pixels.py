@@ -7,6 +7,8 @@ class MockPixels:
             print(f"LED{index} -> {val}")
 
     def show(self):
+        # if self.debug:
+        #     print(f"###### SHOW ######")
         pass
 
     def fill(self, colors):

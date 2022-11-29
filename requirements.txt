@@ -2,7 +2,7 @@ adafruit-circuitpython-servokit
 adafruit-circuitpython-neopixel
 adafruit-circuitpython-fancyled
 requests
-pytz~=2022.6
+pytz
 pyzmq
-Flask~=2.2.2
+Flask
 rpi_ws281x

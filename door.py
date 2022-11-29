@@ -1,7 +1,7 @@
 import random
 from datetime import time, datetime
 
-from neopixelwrapper import pixels, RED_INDEX, WHITE_INDEX
+from neopixelwrapper import NeoPixel
 
 
 # FancyLED: For color correction
@@ -26,9 +26,9 @@ class Door:
         self.evening_times = None
         self.is_door_day = False
 
-        self.celebration_state = [0, 0, 0, 250]
-        self.celebration_increasing_color = RED_INDEX
-        self.celebration_decreasing_color = WHITE_INDEX
+        self.current_celebration_color = [0, 0, 0, 250]
+        self.celebration_increasing_color = NeoPixel.RED_INDEX
+        self.celebration_decreasing_color = NeoPixel.WHITE_INDEX
 
     def should_light(self, current_datetime: datetime):
         if self.evening_times[0] < current_datetime.time() < self.evening_times[1]:
@@ -40,11 +40,13 @@ class Door:
         door_leds = {}
         if self.should_light(current_datetime):
             if self.is_door_day:
-                pixels.fill(self.update_celebration_color())
+                for led in self.led_range:
+                    NeoPixel().pixels[led] = self.current_celebration_color
+                self.update_celebration_color()
             else:
                 # TODO: Jouer l'animation
                 for led in self.led_range:
-                    pixels[led] = [23, 23, 13]
+                    NeoPixel().pixels[led] = [23, 23, 13, 0]
 
         return door_leds
 
@@ -54,13 +56,11 @@ class Door:
         self.is_door_day = current_day.day == self.day_number
 
     def update_celebration_color(self):
-        if self.celebration_state[WHITE_INDEX] == 250:
-            self.celebration_decreasing_color = WHITE_INDEX
-            self.celebration_increasing_color = RED_INDEX
-        elif self.celebration_state[WHITE_INDEX] == 0:
-            self.celebration_decreasing_color = RED_INDEX
-            self.celebration_increasing_color = WHITE_INDEX
-        self.celebration_state[self.celebration_decreasing_color] -= 1
-        self.celebration_state[self.celebration_increasing_color] += 1
-
-        return self.celebration_state
+        if self.current_celebration_color[NeoPixel.WHITE_INDEX] == 250:
+            self.celebration_decreasing_color = NeoPixel.WHITE_INDEX
+            self.celebration_increasing_color = NeoPixel.RED_INDEX
+        elif self.current_celebration_color[NeoPixel.WHITE_INDEX] == 0:
+            self.celebration_decreasing_color = NeoPixel.RED_INDEX
+            self.celebration_increasing_color = NeoPixel.WHITE_INDEX
+        self.current_celebration_color[self.celebration_decreasing_color] -= 1
+        self.current_celebration_color[self.celebration_increasing_color] += 1
