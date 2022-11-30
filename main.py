@@ -1,16 +1,15 @@
 from itertools import chain
 
 from door import Door
-from neopixelwrapper import NeoPixel
+from neopixelwrapper import pixels
 from tools import get_now, get_sun_times, Timer
 
 if __name__ == '__main__':
     timer = Timer()
     current_time = get_now()
     current_day = None
-    NeoPixel()
     village = [
-        Door(1, chain(range(0, 5), range(5, 9))),
+        Door(1, list(chain(range(0, 5), range(5, 9)))),
         Door(3, range(27, 36)),
         Door(5, range(9, 18)),
         Door(7, range(78, 84)),
@@ -20,8 +19,8 @@ if __name__ == '__main__':
         Door(15, range(84, 90)),
         Door(17, range(36, 45)),
         Door(19, range(63, 71)),
-        Door(21, range(72, 78)),
-        Door(29, range(72, 78)) # TEST DOOR
+        # Door(21, range(72, 78)),
+        Door(29, range(72, 78))  # TEST DOOR
     ]
 
     while True:
@@ -36,4 +35,4 @@ if __name__ == '__main__':
 
         for door in village:
             door.update_door_leds_state(current_time)
-            NeoPixel().pixels.show()
+        pixels.show()

@@ -15,8 +15,8 @@ def get_sun_times():
     try:
         response = requests.request("GET", url, params=bordeaux_location).json()["results"]
         return {
-            "sunrise": datetime.strptime(response["sunrise"], '%H:%M:%S %p') + timedelta(hours=1),
-            "sunset": datetime.strptime(response["sunset"], '%H:%M:%S %p') + timedelta(hours=1)
+            "sunrise": datetime.strptime(response["sunrise"], '%I:%M:%S %p') + timedelta(hours=1),
+            "sunset": datetime.strptime(response["sunset"], '%I:%M:%S %p') + timedelta(hours=1)
         }
     except:
         print("Error getting sun times.")
