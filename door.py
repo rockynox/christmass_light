@@ -1,7 +1,7 @@
 import random
 from datetime import time, datetime
 
-from neopixelwrapper import WHITE_INDEX, RED_INDEX, pixels
+from neopixelwrapper import RED_INDEX, pixels, GREEN_INDEX, WHITE_INDEX
 
 
 # FancyLED: For color correction
@@ -18,12 +18,17 @@ def get_evening_times(sun_time):
     return [evening_light_up, evening_shutdown]
 
 
-MAX_ANIMATION_SPEED = 10
+MAX_ANIMATION_SPEED = 80
 ANIMATION_COLORS = [
-    [[0, 0, 0, 0], 10],  # Black
-    [[0, 1, 0, 0], 30],
-    [[0, 0, 13, 0], 90],
+    [(0, 0, 0, 0), 20],  # Black
+    [(200, 80, 00, 0), 50],  # Yellow
+    [(0, 0, 70, 200), 1],  # White
+    [(200, 30, 0, 0), 40],  # Red
+    [(200, 10, 0, 0), 20],  # Red warm
 ]
+
+CELEBRATION_COLOR_1 = WHITE_INDEX
+CELEBRATION_COLOR_2 = GREEN_INDEX
 
 
 def generate_animation_state(led_number):
@@ -42,9 +47,9 @@ class Door:
         self.evening_times = None
         self.is_door_day = False
 
-        self.current_celebration_color = [0, 0, 0, 250]
-        self.celebration_increasing_color = RED_INDEX
-        self.celebration_decreasing_color = WHITE_INDEX
+        self.current_celebration_color = [0, 0, 0, 0]
+        self.celebration_increasing_color = CELEBRATION_COLOR_1
+        self.celebration_decreasing_color = CELEBRATION_COLOR_2
 
     def should_light(self, current_datetime: datetime):
         if self.evening_times[0] < current_datetime.time() < self.evening_times[1]:
@@ -74,18 +79,23 @@ class Door:
     def change_day(self, current_day: datetime, sun_times):
         self.morning_times = get_morning_times(sun_times)
         self.evening_times = get_evening_times(sun_times)
-        print(f'Sun times :{sun_times["sunrise"]} -> {sun_times["sunset"]}')
         print(
             f"Door {self.day_number} ({self.led_range}): Morning {self.morning_times[0]} -> {self.morning_times[1]} - "
             f"Evening {self.evening_times[0]} -> {self.evening_times[1]}")
         self.is_door_day = current_day.day == self.day_number
 
     def update_celebration_color(self):
-        if self.current_celebration_color[WHITE_INDEX] == 250:
-            self.celebration_decreasing_color = WHITE_INDEX
-            self.celebration_increasing_color = RED_INDEX
-        elif self.current_celebration_color[WHITE_INDEX] == 0:
-            self.celebration_decreasing_color = RED_INDEX
-            self.celebration_increasing_color = WHITE_INDEX
+        if self.current_celebration_color[CELEBRATION_COLOR_2] == 250:
+            self.celebration_decreasing_color = CELEBRATION_COLOR_2
+            self.celebration_increasing_color = CELEBRATION_COLOR_1
+        elif self.current_celebration_color[CELEBRATION_COLOR_1] == 250:
+            self.celebration_decreasing_color = CELEBRATION_COLOR_1
+            self.celebration_increasing_color = CELEBRATION_COLOR_2
+        elif self.current_celebration_color[CELEBRATION_COLOR_2] == 0 and self.current_celebration_color[
+            CELEBRATION_COLOR_1] == 0:
+            self.current_celebration_color[CELEBRATION_COLOR_1] = 0
+            self.current_celebration_color[CELEBRATION_COLOR_2] = 250
+            return
+
         self.current_celebration_color[self.celebration_decreasing_color] -= 1
         self.current_celebration_color[self.celebration_increasing_color] += 1
