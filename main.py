@@ -10,15 +10,15 @@ if __name__ == '__main__':
     current_day = None
     village = [
         Door(1, list(chain(range(0, 5), range(5, 9)))),
-        Door(3, range(27, 36)),
-        Door(5, range(9, 18)),
-        Door(7, range(78, 84)),
-        Door(9, range(45, 54)),
-        Door(11, range(54, 63)),
-        Door(13, range(18, 27)),
-        Door(15, range(84, 90)),
-        Door(17, range(36, 45)),
-        Door(19, range(63, 71)),
+        Door(3, list(range(27, 36))),
+        Door(5, list(range(9, 18))),
+        Door(7, list(range(78, 84))),
+        Door(9, list(range(45, 54))),
+        Door(11, list(range(54, 63))),
+        Door(13, list(range(18, 27))),
+        Door(15, list(range(84, 90))),
+        Door(17, list(range(36, 45))),
+        Door(19, list(range(63, 71))),
         # Door(21, range(72, 78)),
         Door(29, range(72, 78))  # TEST DOOR
     ]
