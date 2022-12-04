@@ -1,45 +1,50 @@
 import random
 from datetime import time, datetime
 
-from neopixelwrapper import RED_INDEX, pixels, GREEN_INDEX, WHITE_INDEX
+from neopixelwrapper import pixels, WHITE_INDEX, RED_INDEX
 
+MAX_ANIMATION_SPEED = 500
+ANIMATION_COLORS = [
+    [(0, 0, 0, 0), 10],  # Black
+    [(200, 80, 00, 0), 50],  # Yellow
+    [(0, 0, 70, 200), 1],  # White
+    [(200, 30, 0, 0), 40],  # Red
+    [(170, 10, 0, 0), 20],  # Red warm
+    [(255, 215, 0, 0), 20],  # Gold
+]
 
-# FancyLED: For color correction
+CELEBRATION_COLOR_1 = WHITE_INDEX
+CELEBRATION_COLOR_2 = RED_INDEX
+
+MORNING_LIGHT_UP_MIN_HOUR = 6
+MORNING_LIGHT_UP_MAX_HOUR = 7
+EVENING_SHUTDOWN_MIN_HOUR = 22
+EVENING_SHUTDOWN_MAX_HOUR = 23
+
 
 def get_morning_times(sun_time):
-    morning_light_up = time(random.randint(6, 7), random.randint(0, 59))
-    morning_shutdown = time(random.randint(7, sun_time["sunrise"].hour + 1), random.randint(0, 59))
+    morning_light_up = time(random.randint(MORNING_LIGHT_UP_MIN_HOUR, MORNING_LIGHT_UP_MAX_HOUR), random.randint(0, 59))
+    morning_shutdown = time(random.randint(sun_time["sunrise"].hour, sun_time["sunrise"].hour + 1),
+                            random.randint(0, 59))
     return [morning_light_up, morning_shutdown]
 
 
 def get_evening_times(sun_time):
-    evening_light_up = time(random.randint(sun_time["sunset"].hour - 1, 19), random.randint(0, 59))
-    evening_shutdown = time(random.randint(21, 23), random.randint(0, 59))
+    evening_light_up = time(random.randint(sun_time["sunset"].hour - 1, sun_time["sunset"].hour + 1),
+                            random.randint(0, 59))
+    evening_shutdown = time(random.randint(EVENING_SHUTDOWN_MIN_HOUR, EVENING_SHUTDOWN_MAX_HOUR), random.randint(0, 59))
     return [evening_light_up, evening_shutdown]
 
 
-MAX_ANIMATION_SPEED = 80
-ANIMATION_COLORS = [
-    [(0, 0, 0, 0), 20],  # Black
-    [(200, 80, 00, 0), 50],  # Yellow
-    [(0, 0, 70, 200), 1],  # White
-    [(200, 30, 0, 0), 40],  # Red
-    [(200, 10, 0, 0), 20],  # Red warm
-]
-
-CELEBRATION_COLOR_1 = WHITE_INDEX
-CELEBRATION_COLOR_2 = GREEN_INDEX
-
-
-def generate_animation_state(led_number):
-    colors = [sublist[0] for sublist in ANIMATION_COLORS]
-    colors_weight = [sublist[1] for sublist in ANIMATION_COLORS]
+def generate_animation_state(led_number, animation_colors):
+    colors = [sublist[0] for sublist in animation_colors]
+    colors_weight = [sublist[1] for sublist in animation_colors]
     return random.choices(colors, weights=colors_weight, k=led_number)
 
 
 class Door:
     def __init__(self, day_number: int, led_range: [int]):
-        self.current_animation_speed = 0
+        self.remaining_time_on_current_animation_state = 0
         self.current_animation_state = []
         self.day_number = day_number
         self.led_range = led_range
@@ -52,7 +57,8 @@ class Door:
         self.celebration_decreasing_color = CELEBRATION_COLOR_2
 
     def should_light(self, current_datetime: datetime):
-        if self.evening_times[0] < current_datetime.time() < self.evening_times[1]:
+        # return True
+        if self.evening_times[0] < current_datetime.time() < self.evening_times[1] or self.is_door_day:
             return True
         elif self.morning_times[0] < current_datetime.time() < self.morning_times[1]:
             return False
@@ -65,16 +71,17 @@ class Door:
                     pixels[led] = self.current_celebration_color
                 self.update_celebration_color()
             else:
-                if self.current_animation_speed > 0:
-                    self.current_animation_speed -= 1
-                else:
-                    self.current_animation_state = generate_animation_state(len(self.led_range))
-                    self.current_animation_speed = random.randint(1, MAX_ANIMATION_SPEED)
-
-                for index, led in enumerate(self.led_range):
-                    pixels[led] = self.current_animation_state[index]
+                self.play_animation(MAX_ANIMATION_SPEED, ANIMATION_COLORS)
 
         return door_leds
+
+    def light(self, color):
+        for led in self.led_range:
+            pixels[led] = color
+
+    def shutdown(self):
+        for led in self.led_range:
+            pixels[led] = (0, 0, 0, 0)
 
     def change_day(self, current_day: datetime, sun_times):
         self.morning_times = get_morning_times(sun_times)
@@ -99,3 +106,13 @@ class Door:
 
         self.current_celebration_color[self.celebration_decreasing_color] -= 1
         self.current_celebration_color[self.celebration_increasing_color] += 1
+
+    def play_animation(self, max_animation_speed, animation_colors):
+        if self.remaining_time_on_current_animation_state > 0:
+            self.remaining_time_on_current_animation_state -= 1
+        else:
+            self.current_animation_state = generate_animation_state(len(self.led_range), animation_colors)
+            self.remaining_time_on_current_animation_state = random.randint(1, max_animation_speed)
+
+        for index, led in enumerate(self.led_range):
+            pixels[led] = self.current_animation_state[index]
