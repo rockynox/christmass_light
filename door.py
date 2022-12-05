@@ -57,11 +57,9 @@ class Door:
         self.celebration_decreasing_color = CELEBRATION_COLOR_2
 
     def should_light(self, current_datetime: datetime):
-        # return True
-        if self.evening_times[0] < current_datetime.time() < self.evening_times[1] or self.is_door_day:
-            return True
-        elif self.morning_times[0] < current_datetime.time() < self.morning_times[1]:
-            return False
+        return (self.evening_times[0] < current_datetime.time() < self.evening_times[1]
+                or self.morning_times[0] < current_datetime.time() < self.morning_times[1]
+                or self.is_door_day)
 
     def update_door_leds_state(self, current_datetime: datetime):
         door_leds = {}

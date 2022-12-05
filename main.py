@@ -17,7 +17,7 @@ village = [
     Door(11, list(range(54, 63))),
     Door(19, list(range(63, 72))),
 
-    Door(21, range(72, 78)),
+    Door(21, list(range(72, 78))),
     Door(7, list(range(78, 84))),
     Door(15, list(range(84, 90))),
 ]
@@ -25,11 +25,11 @@ village = [
 if __name__ == '__main__':
     try:
         # timer = Timer()
-        current_time = get_now()
         current_day = None
 
         while True:
             # timer.update()
+            current_time = get_now()
 
             if current_time.day != current_day:
                 current_day = current_time.day
