@@ -12,6 +12,8 @@ ANIMATION_COLORS = [
     [(170, 10, 0, 0), 20],  # Red warm
     [(255, 215, 0, 0), 20],  # Gold
 ]
+# TODO: Utiliser les couleurs de fancyLED
+# TODO: Faire un object avec des animations
 
 CELEBRATION_COLOR_1 = WHITE_INDEX
 CELEBRATION_COLOR_2 = RED_INDEX
@@ -63,6 +65,7 @@ class Door:
 
     def update_door_leds_state(self, current_datetime: datetime):
         door_leds = {}
+        # TODO: Calculer le "should change" en utilisant un timer pour éviter des changement calculer sur la clock
         if self.should_light(current_datetime):
             if self.is_door_day:
                 for led in self.led_range:
