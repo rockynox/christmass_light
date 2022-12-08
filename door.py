@@ -66,6 +66,7 @@ class Door:
             pixels[led] = color
 
     def shutdown(self):
+        logging.debug(f"Door {self.day_number} shutdown.")
         for led in self.led_range:
             pixels[led] = (0, 0, 0, 0)
 
@@ -113,6 +114,7 @@ class Door:
                 self.remaining_time_on_current_animation_state -= 1
             else:
                 self.generate_new_animation_state()
+                logging.debug(f"Door {self.day_number} new animation: {self.current_animation['name']}")
 
             self.display_animation()
 
