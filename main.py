@@ -17,7 +17,7 @@ village = [
 
     Door(17, list(range(36, 45))),
     Door(6, list(range(45, 54))),
-    # Door(9, list(range(45, 54))),
+    Door(9, list(range(45, 54))),
 
     Door(11, list(range(54, 63))),
     Door(19, list(range(63, 72))),
@@ -28,7 +28,7 @@ village = [
 ]
 
 if __name__ == '__main__':
-    setup_logger()
+    setup_logger(logging.DEBUG)
     try:
         # timer = Timer()
         current_day = None

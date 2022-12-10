@@ -9,8 +9,8 @@ CELEBRATION_COLOR_1 = WHITE_INDEX
 CELEBRATION_COLOR_2 = RED_INDEX
 
 MORNING_LIGHT_UP_MIN_HOUR = 6
-MORNING_LIGHT_UP_MAX_HOUR = 7
-EVENING_SHUTDOWN_MIN_HOUR = 22
+MORNING_LIGHT_UP_MAX_HOUR = 8
+EVENING_SHUTDOWN_MIN_HOUR = 21
 EVENING_SHUTDOWN_MAX_HOUR = 23
 
 
@@ -33,6 +33,7 @@ class Door:
         self.morning_times = None
         self.evening_times = None
         self.is_door_day = False
+        self.is_light_up = False
 
         self.current_animation = None
         self.current_animation_state = []
@@ -44,11 +45,23 @@ class Door:
         self.celebration_decreasing_color = CELEBRATION_COLOR_2
 
     def should_light(self, current_datetime: datetime):
-        return (self.evening_times[0] < current_datetime.time() < self.evening_times[1]
-                or self.morning_times[0] < current_datetime.time() < self.morning_times[1]
-                or (self.is_door_day
-                    and self.evening_times[1] > current_datetime.time() > self.morning_times[0])
-                )
+        should_light = (self.evening_times[0] < current_datetime.time() < self.evening_times[1]
+                        or self.morning_times[0] < current_datetime.time() < self.morning_times[1]
+                        or (self.is_door_day
+                            and self.evening_times[1] > current_datetime.time() > self.morning_times[0])
+                        )
+        if should_light and self.is_light_up:
+            return True
+        elif should_light and not self.is_light_up:
+            logging.debug(f"Door {self.day_number} light-up.")
+            self.is_light_up = True
+            return True
+        elif not should_light and not self.is_light_up:
+            return False
+        elif not should_light and not self.is_light_up:
+            logging.debug(f"Door {self.day_number} shutdown.")
+            self.is_light_up = False
+            return False
 
     def update_door_leds_state(self, current_datetime: datetime):
         # TODO : Calculer le "should change" en utilisant un timer pour éviter des changements de clock
@@ -66,7 +79,6 @@ class Door:
             pixels[led] = color
 
     def shutdown(self):
-        logging.debug(f"Door {self.day_number} shutdown.")
         for led in self.led_range:
             pixels[led] = (0, 0, 0, 0)
 
@@ -108,13 +120,13 @@ class Door:
     def play_animation(self):
         if self.remaining_time_on_current_animation == 0:
             self.choose_animation()
+            logging.debug(f"Door {self.day_number} new animation: {self.current_animation['name']}")
         else:
             self.remaining_time_on_current_animation -= 1
             if self.remaining_time_on_current_animation_state > 0:
                 self.remaining_time_on_current_animation_state -= 1
             else:
                 self.generate_new_animation_state()
-                logging.debug(f"Door {self.day_number} new animation: {self.current_animation['name']}")
 
             self.display_animation()
 
