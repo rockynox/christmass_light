@@ -12,7 +12,7 @@ village = [
     Door(1, list(chain(range(0, 5), range(5, 9)))),
     Door(5, list(range(9, 18))),
 
-    Door(13, list(range(18, 27))),
+    Door(14, list(range(18, 27))),
     Door(3, list(range(27, 34))),  # -2 Led dehors
 
     Door(17, list(range(36, 45))),
@@ -20,6 +20,7 @@ village = [
     Door(9, list(range(45, 54))),
 
     Door(11, list(range(54, 63))),
+    #Door(11, list(range(63, 72))),
     Door(19, list(range(63, 72))),
 
     Door(21, list(range(72, 78))),

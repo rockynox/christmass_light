@@ -8,8 +8,8 @@ from neopixelwrapper import pixels, WHITE_INDEX, RED_INDEX
 CELEBRATION_COLOR_1 = WHITE_INDEX
 CELEBRATION_COLOR_2 = RED_INDEX
 
-MORNING_LIGHT_UP_MIN_HOUR = 6
-MORNING_LIGHT_UP_MAX_HOUR = 8
+MORNING_LIGHT_UP_MIN_HOUR = 7
+MORNING_LIGHT_UP_MAX_HOUR = 9
 EVENING_SHUTDOWN_MIN_HOUR = 21
 EVENING_SHUTDOWN_MAX_HOUR = 23
 
@@ -67,8 +67,9 @@ class Door:
         # TODO : Calculer le "should change" en utilisant un timer pour éviter des changements de clock
         if self.should_light(current_datetime):
             if self.is_door_day:
-                self.light(self.current_celebration_color)
-                self.update_celebration_color()
+                # self.light(self.current_celebration_color)
+                # self.update_celebration_color()
+                self.play_animation()
             else:
                 self.play_animation()
         else:

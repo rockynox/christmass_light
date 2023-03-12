@@ -6,3 +6,4 @@ pytz
 pyzmq
 Flask
 rpi_ws281x
+spotipy
