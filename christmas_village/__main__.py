@@ -6,8 +6,7 @@ from common.neopixelwrapper import pixels
 from common.tools import get_now, get_sun_times
 
 village = [
-    # Door(1, list(range(0, 9))),
-    Door(22, list(range(0, 9))),
+    Door(1, list(range(0, 9))),
     Door(5, list(range(9, 18))),
 
     Door(14, list(range(18, 27))),
