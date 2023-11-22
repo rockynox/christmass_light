@@ -2,8 +2,9 @@ import logging
 from datetime import time, datetime, timedelta
 from random import randint, choices, choice
 
-from animations import ANIMATIONS, CELEBRATIONS
-from neopixelwrapper import pixels, WHITE_INDEX, RED_INDEX
+
+from christmas_village.animations import CELEBRATIONS, ANIMATIONS
+from common.neopixelwrapper import pixels, WHITE_INDEX, RED_INDEX
 
 CELEBRATION_COLOR_1 = WHITE_INDEX
 CELEBRATION_COLOR_2 = RED_INDEX
@@ -66,12 +67,13 @@ class Door:
     def update_door_leds_state(self, current_datetime: datetime):
         # TODO : Calculer le "should change" en utilisant un timer pour éviter des changements de clock
         if self.should_light(current_datetime):
-            if self.is_door_day:
+            # deprecated, use celebration now
+            # if self.is_door_day:
                 # self.light(self.current_celebration_color)
                 # self.update_celebration_color()
-                self.play_animation()
-            else:
-                self.play_animation()
+                # self.play_animation()
+            # else:
+            self.play_animation()
         else:
             self.shutdown()
 
@@ -91,6 +93,7 @@ class Door:
             f"Evening {self.evening_times[0]} -> {self.evening_times[1]}")
         self.is_door_day = current_day.day == self.day_number
 
+    # @deprecated
     def update_celebration_color(self):
         if self.current_celebration_color[CELEBRATION_COLOR_2] == 250:
             self.celebration_decreasing_color = CELEBRATION_COLOR_2

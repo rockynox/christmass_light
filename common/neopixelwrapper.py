@@ -1,7 +1,5 @@
 import os
 
-from mock_pixels import MockPixels
-
 
 class Singleton:
     __instance = None
@@ -32,4 +30,6 @@ if os.uname().nodename == "lalapi":
     pixels = neopixel.NeoPixel(PIN, NUMPIXELS, brightness=BRIGHTNESS, auto_write=AUTO_WRITE,
                                bpp=4)
 else:
+    from common.mock_pixels import MockPixels
+
     pixels = MockPixels()

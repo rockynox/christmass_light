@@ -1,26 +1,23 @@
 import logging
-import sys
-from datetime import datetime
-from itertools import chain
 
-from door import Door
-from logger import setup_logger
-from neopixelwrapper import pixels
-from tools import get_now, get_sun_times
+from christmas_village.door import Door
+from common.logger import setup_logger
+from common.neopixelwrapper import pixels
+from common.tools import get_now, get_sun_times
 
 village = [
-    Door(1, list(chain(range(0, 5), range(5, 9)))),
+    # Door(1, list(range(0, 9))),
+    Door(22, list(range(0, 9))),
     Door(5, list(range(9, 18))),
 
     Door(14, list(range(18, 27))),
-    Door(3, list(range(27, 34))),  # -2 Led dehors
+    Door(3, list(range(27, 36))),
 
-    Door(17, list(range(36, 45))),
-    Door(6, list(range(45, 54))),
-    Door(9, list(range(45, 54))),
+    Door(17, list(range(36, 42))),
+    Door(6, list(range(42, 48))),
+    Door(9, list(range(48, 54))),
 
     Door(11, list(range(54, 63))),
-    #Door(11, list(range(63, 72))),
     Door(19, list(range(63, 72))),
 
     Door(21, list(range(72, 78))),
@@ -31,11 +28,9 @@ village = [
 if __name__ == '__main__':
     setup_logger(logging.DEBUG)
     try:
-        # timer = Timer()
         current_day = None
 
         while True:
-            # timer.update()
             current_time = get_now()
 
             if current_time.day != current_day:

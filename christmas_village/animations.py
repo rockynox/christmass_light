@@ -18,7 +18,7 @@ ANIMATIONS = [
     [{
         "name": "TV",
         "is_celebration": False,
-        "max_duration": 2000,
+        "max_duration": 800,
         "max_speed": 300,
         "full_blink": True,
         "weighted_colors": [
@@ -34,14 +34,11 @@ CELEBRATIONS = [
         "name": "Celebration 1",
         "is_celebration": True,
         "max_duration": 100000,
-        "max_speed": 30,
-        "full_blink": True,
+        "max_speed": 15,
+        "full_blink": False,
         "weighted_colors": [
-            [(0, 180, 216, 0), 10],
-            [(202, 240, 248, 200), 30],
-            [(0, 150, 199, 0), 20],
-            [(75, 188, 23, 0), 20],
-            [(0, 0, 0, 255), 20],
+            [(0, 255, 0, 0), 100],
+            [(255, 255, 255, 255), 5],
         ]
     }, 1]
 ]

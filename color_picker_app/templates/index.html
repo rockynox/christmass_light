@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGB Color Picker Webapp</title>
+    <style>
+        body {
+            padding: 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slider-container {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .slider-container input{
+            width: 100%;
+        }
+
+        #color-display {
+            width: 100%;
+            height: 150px;
+            margin-top: 20px;
+            border: 1px solid #000;
+        }
+
+        @media (min-width: 600px) {
+            #color-display {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="slider-container">
+    <label for="r">Red</label>
+    <input type="range" id="r" name="r" min="0" max="255">
+</div>
+<div class="slider-container">
+    <label for="g">Green</label>
+    <input type="range" id="g" name="g" min="0" max="255">
+</div>
+<div class="slider-container">
+    <label for="b">Blue</label>
+    <input type="range" id="b" name="b" min="0" max="255">
+</div>
+<div class="slider-container">
+    <label for="b">White</label>
+    <input type="range" id="w" name="w" min="0" max="255">
+</div>
+<div id="color-display"></div>
+
+<script>
+    function updateColor() {
+        const r = document.getElementById('r').value;
+        const g = document.getElementById('g').value;
+        const b = document.getElementById('b').value;
+        const w = document.getElementById('w').value;
+
+        fetch('/update_color', {
+            method: 'POST',
+            body: new URLSearchParams({r, g, b, w}),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('color-display').style.backgroundColor = data.color;
+            });
+    }
+
+    document.getElementById('r').addEventListener('input', updateColor);
+    document.getElementById('g').addEventListener('input', updateColor);
+    document.getElementById('b').addEventListener('input', updateColor);
+    document.getElementById('w').addEventListener('input', updateColor);
+</script>
+</body>
+</html>

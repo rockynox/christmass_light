@@ -56,21 +56,21 @@ while True:
         # pixels.show()
         # time.sleep(1)
 
-        pixels.fill((0, 255, 0, 0))
-        pixels.show()
-        time.sleep(1)
-
-        pixels.fill((0, 0, 255, 0))
-        pixels.show()
-        time.sleep(1)
-
-        pixels.fill((0, 0, 0, 255))
-        pixels.show()
-        time.sleep(1)
-
-        pixels.fill((255, 0, 0, 0))
-        pixels.show()
-        time.sleep(1)
+        # pixels.fill((0, 255, 0, 0))
+        # pixels.show()
+        # time.sleep(1)
+        #
+        # pixels.fill((0, 0, 255, 0))
+        # pixels.show()
+        # time.sleep(1)
+        #
+        # pixels.fill((0, 0, 0, 255))
+        # pixels.show()
+        # time.sleep(1)
+        #
+        # pixels.fill((255, 0, 0, 0))
+        # pixels.show()
+        # time.sleep(1)
         #
         rainbow_cycle(0.001)  # rainbow cycle with 1ms delay per step
 
