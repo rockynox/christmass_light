@@ -22,7 +22,7 @@ BLUE_INDEX = 2
 WHITE_INDEX = 3
 pixels = None
 
-if os.uname().nodename == "lalapi":
+if "pi" in os.uname().nodename:
     import board
     import neopixel
 

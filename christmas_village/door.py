@@ -9,15 +9,16 @@ from common.neopixelwrapper import pixels, WHITE_INDEX, RED_INDEX
 CELEBRATION_COLOR_1 = WHITE_INDEX
 CELEBRATION_COLOR_2 = RED_INDEX
 
-MORNING_LIGHT_UP_MIN_HOUR = 7
+MORNING_LIGHT_UP_MIN_HOUR = 6
 MORNING_LIGHT_UP_MAX_HOUR = 9
 EVENING_SHUTDOWN_MIN_HOUR = 21
 EVENING_SHUTDOWN_MAX_HOUR = 23
 
 
 def get_morning_times(sun_time):
-    morning_light_up = time(randint(MORNING_LIGHT_UP_MIN_HOUR, MORNING_LIGHT_UP_MAX_HOUR), randint(0, 59))
-    morning_shutdown = (sun_time["sunrise"] + timedelta(minutes=randint(0, 100))).time()
+    morning_light_up = (sun_time["sunrise"] - timedelta(minutes=randint(15, 120))).time()
+    morning_shutdown = (sun_time["sunrise"] + timedelta(minutes=randint(0, 30))).time()
+    # morning_light_up = time(randint(MORNING_LIGHT_UP_MIN_HOUR, MORNING_LIGHT_UP_MAX_HOUR), randint(0, 59))
     return [morning_light_up, morning_shutdown]
 
 

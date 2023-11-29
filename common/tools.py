@@ -10,10 +10,11 @@ def get_sun_times():
     import requests
 
     url = "https://api.sunrise-sunset.org/json"
-    bordeaux_location = {"lat": "44.85642", "lng": "-0.5910801"}
+    # bordeaux_location = {"lat": "44.85642", "lng": "-0.5910801"}
+    cebazat_location = {"lat": "45.837014", "lng": "3.107450"}
 
     try:
-        response = requests.request("GET", url, params=bordeaux_location).json()["results"]
+        response = requests.request("GET", url, params=cebazat_location).json()["results"]
         return {
             "sunrise": datetime.strptime(response["sunrise"], '%I:%M:%S %p') + timedelta(hours=1),
             "sunset": datetime.strptime(response["sunset"], '%I:%M:%S %p') + timedelta(hours=1)
