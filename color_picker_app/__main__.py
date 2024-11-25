@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 import sys
+sys.path.insert(0, '/home/pi/christmass_light')
 
 from common.neopixelwrapper import pixels
 
-sys.path.insert(0, '/home/pi/christmass_light')
 
 # from neopixelwrapper import pixels
 
@@ -24,6 +24,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    pixels.fill((0, 0, 0, 0))
+    pixels.show()
     return render_template('index.html')
 
 
@@ -34,9 +36,9 @@ def update_color():
     b = request.form['b']
     w = request.form['w']
     color = f'#{int(r):02x}{int(g):02x}{int(b):02x}'
-    pixels.fill((int(r), int(g), int(b), int(w)))
+    pixels.fill((int(r), int(g), int(b)))
     pixels.show()
-    # pixels.fill((int(r), int(g), int(b)))
+    print((int(r), int(g), int(b)))
     return jsonify(color=color)
 
 
